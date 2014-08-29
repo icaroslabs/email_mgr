@@ -37,7 +37,7 @@ def import_customers(spreadsheet):
     """
     Parse spreadsheet for email addresses, storing each in a customer record.
     """
-    # Excel Spreadsheet
+    # Excel Spreadsheet .xls
     print spreadsheet
     try:
         book = xlrd.open_workbook(spreadsheet)
