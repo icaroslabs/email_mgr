@@ -1,4 +1,4 @@
-from __future__ import absolute_import, unicode_literals
+
 
 ######################
 # MEZZANINE SETTINGS #
@@ -91,12 +91,13 @@ USE_SOUTH = True
 #                ('Full Name', 'anotheremail@example.com'))
 ADMINS = (
     # ('Your Name', 'your_email@domain.com'),
+    ("josh", "joshua.ashley@drssmail.com"),
 )
 MANAGERS = ADMINS
 
 # Hosts/domain names that are valid for this site; required if DEBUG is False
 # See https://docs.djangoproject.com/en/1.5/ref/settings/#allowed-hosts
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["drssrealestate.com",]
 
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
@@ -167,15 +168,15 @@ FILE_UPLOAD_PERMISSIONS = 0o644
 DATABASES = {
     "default": {
         # Add "postgresql_psycopg2", "mysql", "sqlite3" or "oracle".
-        "ENGINE": "django.db.backends.",
+        "ENGINE": "django.db.backends.postgresql_psycopg2",
         # DB name or path to database file if using sqlite3.
-        "NAME": "",
+        "NAME": "drss",
         # Not used with sqlite3.
-        "USER": "",
+        "USER": "postgres",
         # Not used with sqlite3.
-        "PASSWORD": "",
+        "PASSWORD": "frodobaggins",
         # Set to empty string for localhost. Not used with sqlite3.
-        "HOST": "",
+        "HOST": "127.0.0.1", 
         # Set to empty string for default. Not used with sqlite3.
         "PORT": "",
     }
