@@ -19,14 +19,23 @@ urlpatterns = i18n_patterns("",
     ("^admin/", include(admin.site.urls)),
 )
 
-from emailer import views
-urlpatterns += patterns('',
-    url(r'^upload/', views.upload, name='upload'),
-    url(r'^unsubscribe/(?P<pk>\d+)',
-        views.Unsubscribe.as_view(),
-        name='unsubscribe'
-        ),
+# new apps
+from emailer import views as emailer_views
 
+urlpatterns += patterns('',
+    url(r'^upload/', emailer_views.upload, name='upload'),
+    url(r'^unsubscribe/(?P<pk>\d+)',
+        emailer_views.Unsubscribe.as_view(),
+        name='unsubscribe'
+    ),
+    url(r'^unsubscribe/$',
+        emailer_views.Unsubscribe.as_view(pk='666'),
+        name='unsubscribe'
+    ),
+
+
+    # home
+    url("^$", emailer_views.Home.as_view, name="home"),
 
     # We don't want to presume how your homepage works, so here are a
     # few patterns you can use to set it up.
@@ -38,7 +47,7 @@ urlpatterns += patterns('',
     # one homepage pattern, so if you use a different one, comment this
     # one out.
 
-    url("^$", direct_to_template, {"template": "index.html"}, name="home"),
+    #url("^$", direct_to_template, {"template": "index.html"}, name="home"),
 
     # HOMEPAGE AS AN EDITABLE PAGE IN THE PAGE TREE
     # ---------------------------------------------

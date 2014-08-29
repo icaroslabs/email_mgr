@@ -1,4 +1,5 @@
 from django.http import HttpResponseRedirect
+from django.views.generic import TemplateView
 from django.views.generic.detail import DetailView
 
 from emailer.forms import UnsubscribeForm
@@ -13,9 +14,22 @@ def upload(request):
 
 
 class Unsubscribe(DetailView):
-    model = ClientEmail
+    template = 'emailer/unsubscribe.html'
 
-    def get_context_data(self, **kwargs):
-        context = super(Unsubscribe, self).get_context_data(**kwargs)
-        context['form'] = UnsubscribeForm
-        return context
+    def get(self, request, pk, **kwargs):
+        if pk == '666': # bad strategy
+            return ''
+        form = UnsubscribeForm()
+        return ''
+
+    def post(self, request, pk, **kwargs):
+        form = UnsubscribeForm(request['DATA'])
+        return ''
+
+
+class Home(TemplateView):
+    template = 'emailer/home.html'
+
+
+class Success(TemplateView):
+    template = 'emailer/success.html'
