@@ -18,6 +18,5 @@ oauthlib==0.6.3
 pytz==2014.4
 stevedore==0.15
 tzlocal==1.0
-unattended-upgrades==0.1
 wsgiref==0.1.2
 xlrd==0.9.3
