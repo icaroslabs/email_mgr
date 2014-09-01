@@ -29,7 +29,7 @@ class ClientEmail(models.Model):
     cust_id = models.CharField(primary_key=True, max_length=50)
 
     def save(self, *args, **kwargs):
-        self.cust_id = str(hash(self.email))
+        self.cust_id = str(abs(hash(self.email)))
         super(ClientEmail, self).save(*args, **kwargs)
 
     def __unicode__(self):

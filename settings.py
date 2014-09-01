@@ -255,8 +255,11 @@ INSTALLED_APPS = (
     #"mezzanine.accounts",
     #"mezzanine.mobile",
 
+    "crispy_forms",
     "emailer",
 )
+
+CRISPY_TEMPLATE_PACK = 'bootstrap'
 
 # List of processors used by RequestContext to populate the context.
 # Each one should be a callable that takes the request object as its

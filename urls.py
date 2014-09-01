@@ -24,18 +24,19 @@ from emailer import views as emailer_views
 
 urlpatterns += patterns('',
     url(r'^upload/', emailer_views.upload, name='upload'),
+    url(r'^submit/',
+        emailer_views.SubmitUnsubscribe.as_view(),
+        name='submit-unsubscribe'
+    ),
+    url(r'^success/',
+        emailer_views.SuccessUnsubscribe.as_view(),
+        name='success-unsubscribe'
+    ),
     url(r'^unsubscribe/(?P<pk>\d+)',
         emailer_views.Unsubscribe.as_view(),
         name='unsubscribe'
     ),
-    url(r'^unsubscribe/$',
-        emailer_views.Unsubscribe.as_view(pk='666'),
-        name='unsubscribe'
-    ),
-
-
-    # home
-    url("^$", emailer_views.Home.as_view, name="home"),
+    url("^$", emailer_views.Home.as_view(), name="home"),
 
     # We don't want to presume how your homepage works, so here are a
     # few patterns you can use to set it up.
