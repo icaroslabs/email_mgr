@@ -36,8 +36,23 @@ class ClientEmail(models.Model):
         return self.email
 
 
+class Campaign(models.Model):
+    name = models.CharField(max_length=100)
+    time_delta_1 = models.IntegerField()
+    time_delta_2 = models.IntegerField()
+    time_delta_3 = models.IntegerField()
+    time_delta_4 = models.IntegerField()
+    time_delta_5 = models.IntegerField()
+    repeat_forver = models.BooleanField()
+
+    def __unicode__(self):
+        return self.name
+
+
 class EmailSubscriber(models.Model):
     subscriber = models.ForeignKey(ClientEmail, unique=True)
+    campaign = models.ForeignKey(Campaign)
+    start_date = models.DateTimeField(auto_now=True)
 
     def __unicode__(self):
         return self.subscriber.email
@@ -52,6 +67,8 @@ class EmailNonsubscriber(models.Model):
 
 class FaxSubscriber(models.Model):
     subscriber = models.ForeignKey(ClientFax, unique=True)
+    campaign = models.ForeignKey(Campaign)
+    start_date = models.DateTimeField(auto_now=True)
 
     def __unicode__(self):
         return self.subscriber.fax

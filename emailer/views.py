@@ -26,15 +26,16 @@ class Unsubscribe(DetailView):
         form = UnsubscribeForm()
         return render(request, 'emailer/unsubscribe.html', {'form': form})
 
-    # upon form validation, include cust_id querystring and user submitted 
+    # upon form validation, include cust_id querystring and user submitted
     # email in context object
     def post(self, request, pk):
         form = UnsubscribeForm(data=request.POST)
         if form.is_valid():
             if check_email.check_email(form.cleaned_data['email'], pk):
+                # unsubscribe
                 return render(request, 'emailer/success.html')
         else:
-    	    return render(request, 'emailer/unsubscribe.html', {'form': form})
+            return render(request, 'emailer/unsubscribe.html', {'form': form})
 
 
 class Success(TemplateView):
