@@ -53,6 +53,7 @@ class EmailSubscriber(models.Model):
     subscriber = models.ForeignKey(ClientEmail, unique=True)
     campaign = models.ForeignKey(Campaign)
     start_date = models.DateTimeField(auto_now=True)
+    active = models.BooleanField()
 
     def __unicode__(self):
         return self.subscriber.email
