@@ -1,16 +1,20 @@
+from django.core.urlresolvers import reverse
 from django.shortcuts import redirect, render
 from django.views.generic import TemplateView
 from django.views.generic.detail import DetailView
 
 from emailer.forms import UnsubscribeForm
 from emailer.models import ClientEmail
-from emailer.scripts import import_cust
+from emailer.scripts import check_email, import_cust, unsubscribe
 
 
 def upload(request):
     if request.method == 'POST':
         import_cust(request.FILES['spreadsheet'])
-    return redirect(request.META['HTTP_REFERER'])
+    else:
+        return redirect(request.META['HTTP_REFERER'])
+
+
 class Home(TemplateView):
     template_name = 'emailer/home.html'
 
@@ -18,30 +22,20 @@ class Home(TemplateView):
 class Unsubscribe(DetailView):
     model = ClientEmail
 
-    def get(self, request, **kwargs):
+    def get(self, request, pk):
         form = UnsubscribeForm()
         return render(request, 'emailer/unsubscribe.html', {'form': form})
 
     # upon form validation, include cust_id querystring and user submitted 
     # email in context object
-    def post(self, request, **kwargs):
+    def post(self, request, pk):
         form = UnsubscribeForm(data=request.POST)
-        context = {'form': form}
-    	return render(request, 'emailer/unsubscribe.html', context)
+        if form.is_valid():
+            if check_email.check_email(form.cleaned_data['email'], pk):
+                return render(request, 'emailer/success.html')
+        else:
+    	    return render(request, 'emailer/unsubscribe.html', {'form': form})
 
 
-class SubmitUnsubscribe(TemplateView):
-    template_name = 'emailer/submit-unsubscribe.html'
-
-    # get method should be unreachable, but return to sender
-    def get(self, request, **kwargs):
-        return redirect(request.META['HTTP_REFERER'])
-
-    # check that cust_id corresponds with provided email
-    def post(self, request, **kwargs):
-        return redirect(request.META['HTTP_REFERER'])
-    
-
-
-class SuccessUnsubscribe(TemplateView):
+class Success(TemplateView):
     template_name = 'emailer/success.html'

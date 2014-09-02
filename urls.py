@@ -23,14 +23,13 @@ urlpatterns = i18n_patterns("",
 from emailer import views as emailer_views
 
 urlpatterns += patterns('',
-    url(r'^upload/', emailer_views.upload, name='upload'),
-    url(r'^submit/',
-        emailer_views.SubmitUnsubscribe.as_view(),
-        name='submit-unsubscribe'
+    url(r'^upload/', 
+        emailer_views.upload, 
+        name='upload'
     ),
     url(r'^success/',
-        emailer_views.SuccessUnsubscribe.as_view(),
-        name='success-unsubscribe'
+        emailer_views.Success.as_view(),
+        name='success'
     ),
     url(r'^unsubscribe/(?P<pk>\d+)',
         emailer_views.Unsubscribe.as_view(),
