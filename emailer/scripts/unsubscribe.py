@@ -1,4 +1,5 @@
 from emailer.models import ClientEmail, EmailSubscriber, EmailNonsubscriber
+from email.scripts import check_subscriber
 
 def run(*args):
     if len(args) != 1:
@@ -11,18 +12,12 @@ def run(*args):
 
 def unsubscribe(email):
     """
-    Remove a client from subscribers and place in nonsubscribers
+    Check if email matches a current Subscriber. Removes Subscriber
+    and creates Nonsubscriber, or does nothing.
     """
-    try:
-        client = ClientEmail.objects.get(email=email)
-    except:
-        print "Client email not found. %s" % email
-    try:
-        EmailNonsubscriber.objects.create(nonsubscriber=client)
-    except:
-        print "Error creating nonsubscriber \t %s" % client.email
-    try:
-        EmailSubscriber.objects.delete(subscriber=client)
-    except:
-        print "Error deleting subscriber \t %s" % client.email
+    if check_subscriber.check_subscriber(email):
+        pass
+    else:
+        print "Email does not match a subscriber"
+        return
 

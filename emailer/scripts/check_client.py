@@ -1,4 +1,4 @@
-from emailer.models import ClientEmail
+import emailer.models as emailer_models
 
 def run(*args):
     if len(args) != 2:
@@ -7,15 +7,14 @@ def run(*args):
             "--script-args=email cust_id"
         )
         return
-    check_email(email=args[0], cust_id=args[1])
+    CheckClient(email=args[0], cust_id=args[1])
 
-def check_email(email, cust_id):
+class CheckClient():
     """
     Return true if given email matches cust_id
     """
-    try:
-        print (ClientEmail.objects.get(pk=cust_id).email == email)
-        return (ClientEmail.objects.get(pk=cust_id).email == email)
-    except:
-        print False
-        return False
+    def __init__(self, **kwargs):
+        return emailer_models.ClientEmail.objects.get(email=kwargs['email']).cust_id == kwargs['cust_id']
+
+
+
