@@ -2,17 +2,17 @@ from django.db import models
 
 
 class Client(models.Model):
-    email = models.EmailField()
-    slug = models.CharField(max_length=50)
-    fax = models.CharField(max_length=20)
+    email = models.EmailField(blank=True)
+    slug = models.CharField(max_length=50, blank=True)
+    fax = models.CharField(max_length=20, blank=True)
 
     def save(self, *args, **kwargs):
-        if self.email and self.email != '':
+        if self.email:
             self.slug = str(abs(hash(self.email)))
             super(Client, self).save(*args, **kwargs)
 
     def __unicode__(self):
-        return self.email
+        return (self.email or self.fax)
 
 
 class EmailTemplate(models.Model):
@@ -23,19 +23,23 @@ class EmailTemplate(models.Model):
         return self.name
 
 
+class TimeDelta(models.Model):
+    name = models.CharField(max_length=100)
+    delta = models.IntegerField()
+    email = models.ForeignKey(EmailTemplate)
+
+    def __unicode__(self):
+        return self.name
+
+
 class Campaign(models.Model):
     name = models.CharField(max_length=100)
-    time_delta_1 = models.IntegerField()
-    time_delta_2 = models.IntegerField()
-    time_delta_3 = models.IntegerField()
-    time_delta_4 = models.IntegerField()
-    time_delta_5 = models.IntegerField()
+    first_delta = models.ForeignKey(TimeDelta, related_name='first_delta')
+    second_delta = models.ForeignKey(TimeDelta, related_name='second_delta')
+    third_delta = models.ForeignKey(TimeDelta, related_name='third_delta')
+    fourth_delta = models.ForeignKey(TimeDelta, related_name='fourth_delta')
+    fifth_delta = models.ForeignKey(TimeDelta, related_name='fifth_delta')
     ad_infinitum = models.BooleanField()
-    email_template_1 = models.ForeignKey(EmailTemplate)
-    email_template_2 = models.ForeignKey(EmailTemplate)
-    email_template_3 = models.ForeignKey(EmailTemplate)
-    email_template_4 = models.ForeignKey(EmailTemplate)
-    email_template_5 = models.ForeignKey(EmailTemplate)
 
     def __unicode__(self):
         return self.name
@@ -46,8 +50,26 @@ class Subscriber(models.Model):
     campaign = models.ForeignKey(Campaign)
     join_date = models.DateField(auto_now=True)
 
+    # first checks if client exists in companion model
+    def save(self, *args, **kwargs):
+        if not Nonsubscriber.objects.get(client=self.client):
+            super(Subscriber, self).save(*args, **kwargs)
+
+    def __unicode__(self):
+        return str(self.client)
+
 
 class Nonsubscriber(models.Model):
     client = models.ForeignKey(Client, unique=True)
     leave_date = models.DateField(auto_now=True)
 
+    # save method deletes record from companion model if it exists
+    def save(self, *args, **kwargs):
+        try:
+            Subscriber.objects.delete(client=self.client)
+        except:
+            pass
+        super(Subscriber, self).save(*args, **kwargs)
+
+    def __unicode__(self):
+        return str(self.client)

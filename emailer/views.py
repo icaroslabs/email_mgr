@@ -3,7 +3,7 @@ from django.views.generic import TemplateView
 from django.views.generic.detail import DetailView
 
 from emailer.forms import UnsubscribeForm
-from emailer.models import ClientEmail
+from emailer.models import Client
 
 
 def upload(request):

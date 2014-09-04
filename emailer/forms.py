@@ -3,12 +3,8 @@ from crispy_forms.layout import Submit
 
 from django import forms
 
-from emailer.models import Spreadsheet
-
-class SpreadsheetForm(forms.ModelForm):
-    class Meta:
-        model = Spreadsheet
-        fields = ['spreadsheet',]
+class SpreadsheetForm(forms.Form):
+    pass
 
 
 class UnsubscribeForm(forms.Form):

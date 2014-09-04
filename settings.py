@@ -16,10 +16,13 @@ RICHTEXT_FILTER_LEVEL = 3 # No filtering
 # Controls the ordering and grouping of the admin menu.
 #
 ADMIN_MENU_ORDER = (
-    ("Content", ("pages.Page", "blog.BlogPost",
-       "generic.ThreadedComment", ("Media Library", "fb_browse"),)),
-    ("Site", ("sites.Site", "redirects.Redirect", "conf.Setting")),
-    ("Users", ("auth.User", "auth.Group",)),
+    ("Subscribers", ("emailer.Client", "emailer.Subscriber", "emailer.Nonsubscriber")),
+    ("Campaigns", ("emailer.Campaign", "emailer.TimeDelta",)),
+    ("Email Templates", ("emailer.EmailTemplate",)),
+#    ("Content", ("pages.Page", "blog.BlogPost",
+#       "generic.ThreadedComment", ("Media Library", "fb_browse"),)),
+#    ("Site", ("sites.Site", "redirects.Redirect", "conf.Setting")),
+#    ("Users", ("auth.User", "auth.Group",)),
 )
 
 # A three item sequence, each containing a sequence of template tags
