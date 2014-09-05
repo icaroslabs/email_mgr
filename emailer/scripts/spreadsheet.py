@@ -1,7 +1,9 @@
 import re, xlrd
 
-from emailer.models import ClientFax, ClientEmail
-
+try:
+    from emailer.models import Client, Subscriber
+except:
+    pass
 
 FAX_PATTERN = re.compile((
     "\d{3}[-\.\s]??\d{3}[-\.\s]??\d{4}|\(\d{3}\)\s*\d"
@@ -27,7 +29,7 @@ def qualify_fax(s):
 def run(*args):
     if len(args) != 1:
         print (
-            "\tUsage: ./manage.py runscript import_cust "
+            "\tUsage: ./manage.py runscript spreadsheet "
             "--script-args=spreadsheet.xls"
         )
         return
@@ -51,7 +53,7 @@ def import_customers(spreadsheet):
         for row in range(sheet.nrows-1):
 
             try:
-                ClientEmail.objects.create(
+                Client.objects.create(
                     email=qualify_email(sheet.cell(row, 1).value)
                 )
                 print "[+] Successfully created email record"

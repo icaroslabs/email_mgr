@@ -16,9 +16,9 @@ RICHTEXT_FILTER_LEVEL = 3 # No filtering
 # Controls the ordering and grouping of the admin menu.
 #
 ADMIN_MENU_ORDER = (
-    ("Subscribers", ("emailer.Client", "emailer.Subscriber", "emailer.Nonsubscriber")),
+    ("Subscribers", ("emailer.Client", "emailer.Subscriber", "emailer.Nonsubscriber",)),
     ("Campaigns", ("emailer.Campaign", "emailer.TimeDelta",)),
-    ("Email Templates", ("emailer.EmailTemplate",)),
+    ("Uploads", ("emailer.EmailTemplate", "emailer.Spreadsheet",)),
 #    ("Content", ("pages.Page", "blog.BlogPost",
 #       "generic.ThreadedComment", ("Media Library", "fb_browse"),)),
 #    ("Site", ("sites.Site", "redirects.Redirect", "conf.Setting")),
@@ -236,6 +236,11 @@ TEMPLATE_DIRS = (os.path.join(PROJECT_ROOT, "templates"),)
 ################
 # APPLICATIONS #
 ################
+EMAIL_BACKEND = "sgbackend.SendGridBackend"
+SENDGRID_USER = "joshua.ashley@drssmail.com"
+SENDGRID_PASSWORD = "frodobagg1ns"
+
+CRISPY_TEMPLATE_PACK = 'bootstrap'
 
 INSTALLED_APPS = (
     "django.contrib.admin",
@@ -261,8 +266,6 @@ INSTALLED_APPS = (
     "crispy_forms",
     "emailer",
 )
-
-CRISPY_TEMPLATE_PACK = 'bootstrap'
 
 # List of processors used by RequestContext to populate the context.
 # Each one should be a callable that takes the request object as its
