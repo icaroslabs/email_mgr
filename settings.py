@@ -236,6 +236,7 @@ TEMPLATE_DIRS = (os.path.join(PROJECT_ROOT, "templates"),)
 ################
 # APPLICATIONS #
 ################
+EMAILER_FROM_ADDR = "someone@drss.domain"
 EMAIL_BACKEND = "sgbackend.SendGridBackend"
 SENDGRID_USER = "joshua.ashley@drssmail.com"
 SENDGRID_PASSWORD = "frodobagg1ns"

@@ -32,11 +32,13 @@ class EmailTemplate(models.Model):
 
 class Campaign(models.Model):
     name = models.CharField(max_length=100, default='Default Campaign')
+    # num days from subscriber.start_date; see scripts/emailer.py
     first_time_delta = models.IntegerField(default=2)
     second_time_delta = models.IntegerField(default=7)
     third_time_delta = models.IntegerField(default=10)
     fourth_time_delta = models.IntegerField(default=14)
-    fifth_time_delta = models.IntegerField(default=14)
+    fifth_time_delta = models.IntegerField(default=28)
+    last_delta = models.IntegerField(default=0) # corresponds to n_time_delta 
     ad_infinitum = models.BooleanField(default=True)
     first_email = models.ForeignKey(EmailTemplate, related_name='first_email')
     second_email = models.ForeignKey(EmailTemplate, related_name='second_email')
