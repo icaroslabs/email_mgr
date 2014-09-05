@@ -12,3 +12,5 @@ The spreadsheet script is used to mass import emails and faxes from an xls file.
 currently only supports xls (not csv, not xlsx). It will parse any xls tho and will
 validate emails and fax numbers on the fly. It only requires that faxes be in the 
 first column (index 0) and email address be in the second column (index 1).
+
+Unsubscribe form functionality works fine, altho it needs a page to sit on.
