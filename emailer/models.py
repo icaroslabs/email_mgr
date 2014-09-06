@@ -38,7 +38,6 @@ class Campaign(models.Model):
     third_time_delta = models.IntegerField(default=10)
     fourth_time_delta = models.IntegerField(default=14)
     fifth_time_delta = models.IntegerField(default=28)
-    last_delta = models.IntegerField(default=0) # corresponds to n_time_delta 
     ad_infinitum = models.BooleanField(default=True)
     first_email = models.ForeignKey(EmailTemplate, related_name='first_email')
     second_email = models.ForeignKey(EmailTemplate, related_name='second_email')
