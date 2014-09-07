@@ -4,6 +4,10 @@
 # MEZZANINE SETTINGS #
 ######################
 
+SITE_TITLE = "DRSS"
+SITE_TAGLINE = "Discount Retail Store Services Real Estate Division"
+
+RICHTEXT_WIDGET_CLASS = "mezzanine.core.forms.TinyMceWidget"
 RICHTEXT_FILTER_LEVEL = 3 # No filtering
 
 # The following settings are already defined with default values in
@@ -12,6 +16,8 @@ RICHTEXT_FILTER_LEVEL = 3 # No filtering
 # overriding. Please consult the settings documentation for a full list
 # of settings Mezzanine implements:
 # http://mezzanine.jupo.org/docs/configuration.html#default-settings
+
+ADMIN_REMOVAL = ("blog.BlogPost",)
 
 # Controls the ordering and grouping of the admin menu.
 #
@@ -30,7 +36,7 @@ ADMIN_MENU_ORDER = (
 #
 DASHBOARD_TAGS = (
     ("blog_tags.quick_blog", "mezzanine_tags.app_list"),
-    ("comment_tags.recent_comments",),
+    ("emailer_tags.quick_spreadsheet", ), #"comment_tags.recent_comments",
     ("mezzanine_tags.recent_actions",),
 )
 

@@ -3,7 +3,7 @@ from django.views.generic import TemplateView
 from django.views.generic.detail import DetailView
 
 from emailer.forms import UnsubscribeForm
-from emailer.models import Client
+from emailer.models import Client, Subscriber
 
 
 def upload(request):
@@ -20,7 +20,7 @@ class Home(TemplateView):
 class Unsubscribe(DetailView):
     model = Client
 
-    def _validate_email(self, email, cust_id):
+    def _validate_email(self, email, slug):
         try:
             cust = Client.objects.get(email=email).slug
         except:
@@ -29,18 +29,17 @@ class Unsubscribe(DetailView):
             return cust == slug
 
     def _unsubscribe(self, email):
-        if True: # email matches subscriber
-            pass # create nonsub and delete sub
+        Subscriber.objects.filter(client__email=email).delete()
 
-    def get(self, request, pk):
+    def get(self, request, slug):
         form = UnsubscribeForm()
         return render(request, 'emailer/unsubscribe.html', {'form': form})
 
-    def post(self, request, pk):
+    def post(self, request, slug):
         form = UnsubscribeForm(data=request.POST)
         if form.is_valid():
-            if self._validate_email(form.cleaned_data['email'], pk):
-                self.unsubscribe(form.cleaned_data['email'])
+            if self._validate_email(form.cleaned_data['email'], slug):
+                self._unsubscribe(form.cleaned_data['email'])
                 return render(request, 'emailer/success.html')
             else:
                 return render(request, 'emailer/fail.html')

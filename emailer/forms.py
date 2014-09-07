@@ -8,7 +8,6 @@ from emailer.scripts.spreadsheet import import_customers
 
 
 class SpreadsheetForm(forms.ModelForm):
-    model = Spreadsheet
 
     def save(self):
         import_customers(self)
@@ -19,8 +18,11 @@ class SpreadsheetForm(forms.ModelForm):
         self.form_id = 'id-spreadsheetForm'
         self.form_class = 'bootstrap'
         self.form_method = 'post'
-        self.form_action = ''
+        self.form_action = 'spreadsheet'
         self.helper.add_input(Submit('submit', 'Submit'))
+
+    class Meta:
+        model = Spreadsheet
 
 
 class UnsubscribeForm(forms.Form):
