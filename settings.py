@@ -106,7 +106,7 @@ MANAGERS = ADMINS
 
 # Hosts/domain names that are valid for this site; required if DEBUG is False
 # See https://docs.djangoproject.com/en/1.5/ref/settings/#allowed-hosts
-ALLOWED_HOSTS = ["drssrealestate.com",]
+ALLOWED_HOSTS = ["drssrealestate.com", "www.drssrealestate.com", "*",]
 
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
@@ -185,7 +185,7 @@ DATABASES = {
         # Not used with sqlite3.
         "PASSWORD": "frodobaggins",
         # Set to empty string for localhost. Not used with sqlite3.
-        "HOST": "127.0.0.1", 
+        "HOST": "127.0.0.1",
         # Set to empty string for default. Not used with sqlite3.
         "PORT": "",
     }
