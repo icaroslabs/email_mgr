@@ -1,5 +1,3 @@
-from django.contrib.auth.models import User
-from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
 
 
@@ -7,7 +5,7 @@ class EmailTemplate(models.Model):
     name = models.CharField(max_length=100, default='Default Email Template')
     subject = models.CharField(max_length=100, blank=True)
     body = models.TextField(blank=True)
-    attachment = models.FileField(upload_to='upload', blank=True)
+    attachment = models.FileField(upload_to='uploads', blank=True)
 
     def __unicode__(self):
         return self.name
@@ -21,12 +19,12 @@ class Campaign(models.Model):
     third_time_delta = models.IntegerField(default=10)
     fourth_time_delta = models.IntegerField(default=14)
     fifth_time_delta = models.IntegerField(default=28)
-    ad_infinitum = models.BooleanField(default=True)
-    first_email = models.ForeignKey(EmailTemplate, related_name='first_email', blank=True)
-    second_email = models.ForeignKey(EmailTemplate, related_name='second_email', blank=True)
-    third_email = models.ForeignKey(EmailTemplate, related_name='third_email', blank=True)
-    fourth_email = models.ForeignKey(EmailTemplate, related_name='fourth_email', blank=True)
-    fifth_email = models.ForeignKey(EmailTemplate, related_name='fifth_email', blank=True)
+    ad_infinitum = models.BooleanField()
+    first_email = models.ForeignKey(EmailTemplate, related_name='first_email')
+    second_email = models.ForeignKey(EmailTemplate, related_name='second_email')
+    third_email = models.ForeignKey(EmailTemplate, related_name='third_email')
+    fourth_email = models.ForeignKey(EmailTemplate, related_name='fourth_email')
+    fifth_email = models.ForeignKey(EmailTemplate, related_name='fifth_email')
 
     def __unicode__(self):
         return self.name
@@ -43,7 +41,6 @@ class Client(models.Model):
             self.slug = str(abs(hash(self.email)))
             super(Client, self).save(*args, **kwargs)
         if self.subscribe_now:
-            # client = Client.objects.get()
             campaign = Campaign.objects.get(name='Default Campaign')
             Subscriber.objects.create(client=self, campaign=campaign)
 
@@ -67,7 +64,7 @@ class Subscriber(models.Model):
 
 
 class Spreadsheet(models.Model):
-    document = models.FileField(upload_to='upload')
+    document = models.FileField(upload_to='uploads')
     date = models.DateTimeField(auto_now=True)
 
     def __unicode__(self):

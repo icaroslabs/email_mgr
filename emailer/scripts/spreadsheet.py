@@ -1,4 +1,4 @@
-import re, xlrd
+import sys, re, xlrd
 
 try:
     from emailer.models import Client, Subscriber
@@ -46,7 +46,7 @@ def import_customers(spreadsheet):
         print book.nsheets
     except:
         print "[-] Failed to open " + spreadsheet
-        exit(1)
+        sys.exit(1)
 
     for sheet in book.sheets():
         print sheet.nrows
@@ -58,7 +58,8 @@ def import_customers(spreadsheet):
                 )
                 print "[+] Successfully created email record"
             except:
-                print "[-] Invalid or existing email %s" % (sheet.cell(row, 1).value)
+                #print "[-] Invalid or existing email %s" % (sheet.cell(row, 1).value)
+                pass
 
             try:
                 ClientFax.objects.create(
@@ -66,7 +67,8 @@ def import_customers(spreadsheet):
                 )
                 print "[+] Successfully created fax record"
             except:
-                print "[-] Invalid or existing fax %s" % (sheet.cell(row, 0).value)
+                #print "[-] Invalid or existing fax %s" % (sheet.cell(row, 0).value)
+                pass
 
 
 
