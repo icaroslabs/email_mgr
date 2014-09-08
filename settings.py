@@ -8,7 +8,7 @@ SITE_TITLE = "DRSS"
 SITE_TAGLINE = "Discount Retail Store Services Real Estate Division"
 
 RICHTEXT_WIDGET_CLASS = "mezzanine.core.forms.TinyMceWidget"
-RICHTEXT_FILTER_LEVEL = 3 # No filtering
+#RICHTEXT_FILTER_LEVEL = 3 # No filtering
 
 # The following settings are already defined with default values in
 # the ``defaults.py`` module within each of Mezzanine's apps, but are
