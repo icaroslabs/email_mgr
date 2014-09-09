@@ -4,7 +4,8 @@ from django.db import models
 class EmailTemplate(models.Model):
     name = models.CharField(max_length=100, default='Default Email Template')
     subject = models.CharField(max_length=100, blank=True)
-    body = models.TextField(blank=True)
+    text = models.TextField(blank=True)
+    html = models.TextField(blank=True)
     attachment = models.FileField(upload_to='uploads', blank=True)
 
     def __unicode__(self):

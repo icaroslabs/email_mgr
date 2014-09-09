@@ -1,4 +1,9 @@
 
+EMAILER_FROM_ADDR = "someone@drss.domain"
+SENDGRID_USER = "joshua.ashley@drssmail.com"
+SENDGRID_PASSWORD = "frodobagg1ns"
+
+CRISPY_TEMPLATE_PACK = 'bootstrap'
 
 ######################
 # MEZZANINE SETTINGS #
@@ -106,7 +111,7 @@ MANAGERS = ADMINS
 
 # Hosts/domain names that are valid for this site; required if DEBUG is False
 # See https://docs.djangoproject.com/en/1.5/ref/settings/#allowed-hosts
-ALLOWED_HOSTS = ["drssrealestate.com", ".drssrealestate.com",]
+ALLOWED_HOSTS = ["drssrealestate.com", ]
 
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
@@ -242,13 +247,6 @@ TEMPLATE_DIRS = (os.path.join(PROJECT_ROOT, "templates"),)
 ################
 # APPLICATIONS #
 ################
-EMAILER_FROM_ADDR = "someone@drss.domain"
-EMAIL_BACKEND = "sgbackend.SendGridBackend"
-SENDGRID_USER = "joshua.ashley@drssmail.com"
-SENDGRID_PASSWORD = "frodobagg1ns"
-
-CRISPY_TEMPLATE_PACK = 'bootstrap'
-
 INSTALLED_APPS = (
     "django.contrib.admin",
     "django.contrib.auth",

@@ -1,12 +1,10 @@
-from django.core.mail import send_mail
+import sendgrid
+
 from django.utils import timezone
 
-from settings import EMAILER_FROM_ADDR
+from drss.emailer.models import Campaign
+from settings import EMAILER_FROM_ADDR, SENDGRID_USER, SENDGRID_PASSWORD
 
-try:
-    from ..models import Subscriber
-except:
-    pass
 
 def run():
     e = Emailer()
@@ -15,31 +13,37 @@ def run():
 
 class Emailer():
     def go(self):
-        recipients = []
-        for target in Subscriber.objects.all():
-            delta = (timezone.now() - target.join_date)
-            if (delta.days >= target.campaign.fifth_time_delta):
-                target.last_delta = 5
-                target.save()
-                recipients += target
-            elif (delta.days >= target.campaign.fourth_time_delta):
-                target.last_delta = 4
-                recipients += target.save()
-            elif (delta.days >= target.campaign.third_time_delta):
-                target.last_delta = 3
-                recipients += target.save()
-            elif (delta.days >= target.campaign.second_time_delta):
-                target.last_delta = 2
-                recipients += target.save()
-            elif (delta.days >= target.campaign.first_time_delta):
-                target.last_delta = 1
-                target.save()
-                recipients += target
-            else: # or else wut nigga
-                pass # dats right nigga
+        sg = sendgrid.SendGridClient(SENDGRID_USER, SENDGRID_PASSWORD)
+        link = "<p><a href=%s>Unsubscribe</a></p>"
 
-        for recipient in recipients:
-            subject = recipient.campaign.first_email.subject
-            body = recipient.campaign.first_email.body + recipient.url
-            sender = EMAILER_FROM_ADDR
-            send_mail(subject, body, sender, recipient)
+        # [ [DELTA1], [DELTA2], [DELTA3], [DELTA4], [DELTA5], ]
+        deltas = [ [], [], [], [], [], ]
+
+        for cam in Campaign.objects.all():
+            first_email = cam.first_email
+            second_email = cam.second_email
+            third_email = cam.third_email
+            fourth_email = cam.fourth_email
+            fifth_email = cam.fifth_email
+
+            # Sort subscribers into lists by delta
+            for sub in cam.subscriber_set.all():
+                if sub.last_delta < 5:
+                    deltas[sub.last_delta].append( (str(sub), sub.url) )
+                else:
+                    deltas[4].append(str(sub))
+                sub.last_delta += 1
+                sub.save()
+
+            # First delta
+            for delta in deltas[0]:
+                message = sendgrid.Mail(
+                    to=[delta[0]],
+                    subject=first_email.subject,
+                    html=first_email.html + (link % delta[1]),
+                    text=first_email.text,
+                    from_email=EMAILER_FROM_ADDR
+                )
+                status, msg = sg.send(message)
+                print msg
+
