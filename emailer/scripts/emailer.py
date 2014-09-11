@@ -12,12 +12,28 @@ def run():
 
 
 class Emailer():
+    def calculate_deltas(self):
+        deltas = [
+            [], # Unused
+            [], # Delta 1
+            [], # Delta 2
+            [], # Delta 3
+            [], # Delta 4
+            [], # Delta 5
+        ]
+
+        for sub in cam.subscriber_set.all():
+            if sub.last_delta < 5:
+                deltas[sub.last_delta].append( (str(sub), sub.url) )
+            else:
+                deltas[5].append(str(sub))
+
+        return deltas
+
     def go(self):
         sg = sendgrid.SendGridClient(SENDGRID_USER, SENDGRID_PASSWORD)
         link = "<p><a href=%s>Unsubscribe</a></p>"
 
-        # [ [DELTA1], [DELTA2], [DELTA3], [DELTA4], [DELTA5], ]
-        deltas = [ [], [], [], [], [], ]
 
         for cam in Campaign.objects.all():
             first_email = cam.first_email
@@ -26,14 +42,8 @@ class Emailer():
             fourth_email = cam.fourth_email
             fifth_email = cam.fifth_email
 
-            # Sort subscribers into lists by delta
-            for sub in cam.subscriber_set.all():
-                if sub.last_delta < 5:
-                    deltas[sub.last_delta].append( (str(sub), sub.url) )
-                else:
-                    deltas[4].append(str(sub))
-                sub.last_delta += 1
-                sub.save()
+            # Calculate deltas
+            deltas = self.calculate_deltas()
 
             # First delta
             for delta in deltas[0]:

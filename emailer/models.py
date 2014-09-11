@@ -12,20 +12,23 @@ class EmailTemplate(models.Model):
         return self.name
 
 
+class TimeDelta(models.Models):
+    email = models.ForeignKey(EmailTemplate)
+    delta = models.IntegerField()
+
+    def __unicode__(self):
+        return str(self.delta), self.email.name
+
+
 class Campaign(models.Model):
     name = models.CharField(max_length=100, default='Default Campaign', unique=True)
     # num days from subscriber.start_date; see scripts/emailer.py
-    first_time_delta = models.IntegerField(default=2)
-    second_time_delta = models.IntegerField(default=7)
-    third_time_delta = models.IntegerField(default=10)
-    fourth_time_delta = models.IntegerField(default=14)
-    fifth_time_delta = models.IntegerField(default=28)
+    first_time_delta = models.ForeignKey(TimeDelta, related_name='first_time_delta')
+    second_time_delta = models.ForeignKey(TimeDelta, related_name='second_time_delta')
+    third_time_delta = models.ForeignKey(TimeDelta, related_name='third_time_delta')
+    fourth_time_delta = models.ForeignKey(TimeDelta, related_name='fourth_time_delta')
+    fifth_time_delta = models.ForeignKey(TimeDelta, related_name='fifth_time_delta')
     ad_infinitum = models.BooleanField()
-    first_email = models.ForeignKey(EmailTemplate, related_name='first_email')
-    second_email = models.ForeignKey(EmailTemplate, related_name='second_email')
-    third_email = models.ForeignKey(EmailTemplate, related_name='third_email')
-    fourth_email = models.ForeignKey(EmailTemplate, related_name='fourth_email')
-    fifth_email = models.ForeignKey(EmailTemplate, related_name='fifth_email')
 
     def __unicode__(self):
         return self.name
