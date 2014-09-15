@@ -12,27 +12,21 @@ class EmailTemplate(models.Model):
         return self.name
 
 
+class Campaign(models.Model):
+    name = models.CharField(max_length=100, default='Default Campaign', unique=True)
+
+    def __unicode__(self):
+        return self.name
+
+
+
 class TimeDelta(models.Model):
+    campaign = models.ForeignKey(Campaign)
     email = models.ForeignKey(EmailTemplate)
     delta = models.IntegerField()
 
     def __unicode__(self):
         return ": ".join(['Day '+str(self.delta), self.email.name])
-
-
-class Campaign(models.Model):
-    name = models.CharField(max_length=100, default='Default Campaign', unique=True)
-    # num days from subscriber.start_date; see scripts/emailer.py
-    #first_time_delta = models.ForeignKey(TimeDelta, related_name='first_time_delta')
-    #second_time_delta = models.ForeignKey(TimeDelta, related_name='second_time_delta')
-    #third_time_delta = models.ForeignKey(TimeDelta, related_name='third_time_delta')
-    #fourth_time_delta = models.ForeignKey(TimeDelta, related_name='fourth_time_delta')
-    #fifth_time_delta = models.ForeignKey(TimeDelta, related_name='fifth_time_delta')
-    deltas = models.ManyToManyField(TimeDelta)
-    ad_infinitum = models.BooleanField()
-
-    def __unicode__(self):
-        return self.name
 
 
 class Client(models.Model):
@@ -54,11 +48,12 @@ class Client(models.Model):
 
 
 class Subscriber(models.Model):
-    client = models.ForeignKey(Client, unique=True)
+    client = models.OneToOneField(Client, unique=True)
     campaign = models.ForeignKey(Campaign)
     join_date = models.DateTimeField(auto_now=True)
     url = models.CharField(max_length=100, blank=True)
     last_delta = models.IntegerField(default=0)
+    last_activity = models.DateTimeField(null=True, blank=True)
 
     def save(self, *args, **kwargs):
         self.url = "http://drssrealestate.com/unsubscribe/%s" % self.client.slug
@@ -71,6 +66,7 @@ class Subscriber(models.Model):
 class Spreadsheet(models.Model):
     document = models.FileField(upload_to='uploads')
     date = models.DateTimeField(auto_now=True)
+    campaign = models.ForeignKey(Campaign)
 
     def __unicode__(self):
         return str(self.document)

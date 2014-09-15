@@ -12,48 +12,31 @@ def run():
 
 
 class Emailer():
-    def calculate_deltas(self):
-        deltas = [
-            [], # Unused
-            [], # Delta 1
-            [], # Delta 2
-            [], # Delta 3
-            [], # Delta 4
-            [], # Delta 5
-        ]
+    def calculate_delta(self, sub, targets):
+        if sub.last_delta >= (timezone.now() - sub.join_date).days:
+            sub.last_delta += 1
+            sub.save()
+            targets.append(sub)
 
-        for sub in cam.subscriber_set.all():
-            if sub.last_delta < 5:
-                deltas[sub.last_delta].append( (str(sub), sub.url) )
-            else:
-                deltas[5].append(str(sub))
-
-        return deltas
-
-    def go(self):
+    def go(self, campaign):
         sg = sendgrid.SendGridClient(SENDGRID_USER, SENDGRID_PASSWORD)
         link = "<p><a href=%s>Unsubscribe</a></p>"
+        targets = []
+        emails = [delta.email for delta in campaign.timedelta_set.all()]
+
+        for sub in campaign.subscriber_set.all():
+            self.calculate_delta(sub)
 
 
-        for cam in Campaign.objects.all():
-            first_email = cam.first_email
-            second_email = cam.second_email
-            third_email = cam.third_email
-            fourth_email = cam.fourth_email
-            fifth_email = cam.fifth_email
+        for target in targets:
 
-            # Calculate deltas
-            deltas = self.calculate_deltas()
-
-            # First delta
-            for delta in deltas[0]:
-                message = sendgrid.Mail(
-                    to=[delta[0]],
-                    subject=first_email.subject,
-                    html=first_email.html + (link % delta[1]),
-                    text=first_email.text,
-                    from_email=EMAILER_FROM_ADDR
-                )
-                status, msg = sg.send(message)
-                print msg
+            message = sendgrid.Mail(
+                to=target.email,
+                subject=campaign.timedelta_set.get(),
+                html=,
+                text=,
+                from_email=EMAILER_FROM_ADDR
+            )
+            status, msg = sg.send(message)
+            print msg
 

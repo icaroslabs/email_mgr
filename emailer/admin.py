@@ -3,32 +3,39 @@ from .models import *
 
 
 class ClientAdmin(admin.ModelAdmin):
-    read_only = ('slug',)
+    readonly_fields = ('slug',)
 
 
-class TimeDeltaAdmin(admin.ModelAdmin):
-    pass
+class TimeDeltaInline(admin.TabularInline):
+    model = TimeDelta
+    extra = 4
+
 
 class EmailTemplateAdmin(admin.ModelAdmin):
     pass
-
-
-class CampaignAdmin(admin.ModelAdmin):
-    pass
-
-
-class SubscriberAdmin(admin.ModelAdmin):
-    read_only = ('client', 'campaign', 'join_date',)
 
 
 class SpreadsheetAdmin(admin.ModelAdmin):
     pass
 
 
+class SpreadsheetInline(admin.TabularInline):
+    model = Spreadsheet
+    extra = 1
+
+
+class CampaignAdmin(admin.ModelAdmin):
+    inlines = [TimeDeltaInline, SpreadsheetInline]
+
+
+class SubscriberAdmin(admin.ModelAdmin):
+    readonly_fields = (
+        'client', 'join_date', 'campaign',
+        'url', 'last_delta', 'last_activity',
+    )
+
 
 admin.site.register(Client, ClientAdmin)
-admin.site.register(TimeDelta, TimeDeltaAdmin)
 admin.site.register(EmailTemplate, EmailTemplateAdmin)
 admin.site.register(Campaign, CampaignAdmin)
 admin.site.register(Subscriber, SubscriberAdmin)
-admin.site.register(Spreadsheet, SpreadsheetAdmin)
