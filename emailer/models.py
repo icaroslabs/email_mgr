@@ -12,22 +12,23 @@ class EmailTemplate(models.Model):
         return self.name
 
 
-class TimeDelta(models.Models):
+class TimeDelta(models.Model):
     email = models.ForeignKey(EmailTemplate)
     delta = models.IntegerField()
 
     def __unicode__(self):
-        return str(self.delta), self.email.name
+        return ": ".join(['Day '+str(self.delta), self.email.name])
 
 
 class Campaign(models.Model):
     name = models.CharField(max_length=100, default='Default Campaign', unique=True)
     # num days from subscriber.start_date; see scripts/emailer.py
-    first_time_delta = models.ForeignKey(TimeDelta, related_name='first_time_delta')
-    second_time_delta = models.ForeignKey(TimeDelta, related_name='second_time_delta')
-    third_time_delta = models.ForeignKey(TimeDelta, related_name='third_time_delta')
-    fourth_time_delta = models.ForeignKey(TimeDelta, related_name='fourth_time_delta')
-    fifth_time_delta = models.ForeignKey(TimeDelta, related_name='fifth_time_delta')
+    #first_time_delta = models.ForeignKey(TimeDelta, related_name='first_time_delta')
+    #second_time_delta = models.ForeignKey(TimeDelta, related_name='second_time_delta')
+    #third_time_delta = models.ForeignKey(TimeDelta, related_name='third_time_delta')
+    #fourth_time_delta = models.ForeignKey(TimeDelta, related_name='fourth_time_delta')
+    #fifth_time_delta = models.ForeignKey(TimeDelta, related_name='fifth_time_delta')
+    deltas = models.ManyToManyField(TimeDelta)
     ad_infinitum = models.BooleanField()
 
     def __unicode__(self):

@@ -6,6 +6,9 @@ class ClientAdmin(admin.ModelAdmin):
     read_only = ('slug',)
 
 
+class TimeDeltaAdmin(admin.ModelAdmin):
+    pass
+
 class EmailTemplateAdmin(admin.ModelAdmin):
     pass
 
@@ -24,6 +27,7 @@ class SpreadsheetAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Client, ClientAdmin)
+admin.site.register(TimeDelta, TimeDeltaAdmin)
 admin.site.register(EmailTemplate, EmailTemplateAdmin)
 admin.site.register(Campaign, CampaignAdmin)
 admin.site.register(Subscriber, SubscriberAdmin)
