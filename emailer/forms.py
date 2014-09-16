@@ -3,14 +3,14 @@ from crispy_forms.layout import Submit
 
 from django import forms
 
-from emailer.models import Spreadsheet
-from emailer.scripts.spreadsheet import import_customers
+from emailer import models
+
+from emailer.scripts import spreadsheet
 
 
 class SpreadsheetForm(forms.ModelForm):
-
     def save(self):
-        import_customers(self)
+        spreadsheet.import_clients(self)
 
     def __init__(self, *args, **kwargs):
         super(SpreadsheetForm, self).__init__(*args, **kwargs)
@@ -22,14 +22,14 @@ class SpreadsheetForm(forms.ModelForm):
         self.helper.add_input(Submit('submit', 'Submit'))
 
     class Meta:
-        model = Spreadsheet
+        model = models.Spreadsheet
 
 
 class UnsubscribeForm(forms.Form):
     email = forms.EmailField(
         label = "Enter your email address",
         required = True,
-        max_length = 100, 
+        max_length = 100,
     )
 
     def __init__(self, *args, **kwargs):

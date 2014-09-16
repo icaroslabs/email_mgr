@@ -15,6 +15,10 @@ class EmailTemplateAdmin(admin.ModelAdmin):
     pass
 
 
+class FaxTemplateAdmin(admin.ModelAdmin):
+    pass
+
+
 class SpreadsheetAdmin(admin.ModelAdmin):
     pass
 
@@ -37,5 +41,6 @@ class SubscriberAdmin(admin.ModelAdmin):
 
 admin.site.register(Client, ClientAdmin)
 admin.site.register(EmailTemplate, EmailTemplateAdmin)
+admin.site.register(FaxTemplate, FaxTemplateAdmin)
 admin.site.register(Campaign, CampaignAdmin)
 admin.site.register(Subscriber, SubscriberAdmin)

@@ -1,9 +1,7 @@
-import sys, re, xlrd
+import csv, sys, re, xlrd
 
-try:
-    from emailer.models import Client, Subscriber
-except:
-    pass
+from drss.emailer import models as emailer_models
+
 
 FAX_PATTERN = re.compile((
     "\d{3}[-\.\s]??\d{3}[-\.\s]??\d{4}|\(\d{3}\)\s*\d"
@@ -17,66 +15,48 @@ EMAIL_PATTERN = re.compile((
 ))
 
 def qualify_email(s):
-    if re.match(EMAIL_PATTERN, s):
-        return s
-    return None
+    return re.match(EMAIL_PATTERN, s)
 
 def qualify_fax(s):
-    if re.match(FAX_PATTERN, s):
-        return s
-    return None
+    return re.match(FAX_PATTERN, s)
 
 def run(*args):
-    if len(args) != 1:
+    if len(args) != 2:
         print (
-            "\tUsage: ./manage.py runscript spreadsheet "
-            "--script-args=spreadsheet.xls"
+            "Usage: ./manage.py runscript spreadsheet "
+            "--script-args=<filename>, <campaign_id>"
         )
         return
-    import_customers(args[0])
+    import_clients(args[0], args[1])
 
-def import_customers(spreadsheet):
+def import_clients(spreadsheet, campaign_id):
     """
-    Parse spreadsheet for email addresses, storing each in a customer record.
+    Parse spreadsheet for emails and faxes, storing each in a
+    unique client record.
     """
-    # Excel Spreadsheet .xls
-    print spreadsheet
     try:
-        book = xlrd.open_workbook(spreadsheet)
-        print book.nsheets
+        campapign = emailer_models.Campaign.objects.get(pk=campaign_id)
     except:
-        print "[-] Failed to open " + spreadsheet
-        sys.exit(1)
+        print "Campaign does not exist. Try one of these."
+        print ", ".join([str(cam.pk) for cam in emailer_models.Campaign.objects.all()])
+        return
+    try:
+        reader = csv.reader(open(spreadsheet))
+        print '[+] Initialized reader object'
+    except Exception, e:
+        print '[-] %s' % e
+        return
 
-    for sheet in book.sheets():
-        print sheet.nrows
-        for row in range(sheet.nrows-1):
+    for row in reader:
+        if qualify_fax(str(row[0])):
+            emailer_models.Client.objects.create(
+                fax=str(row[0]),
+                campaign=campaign,
+            )
 
-            try:
-                Client.objects.create(
-                    email=qualify_email(sheet.cell(row, 1).value)
-                )
-                print "[+] Successfully created email record"
-            except:
-                #print "[-] Invalid or existing email %s" % (sheet.cell(row, 1).value)
-                pass
-
-            try:
-                ClientFax.objects.create(
-                    fax=qualify_fax(sheet.cell(row, 0).value)
-                )
-                print "[+] Successfully created fax record"
-            except:
-                #print "[-] Invalid or existing fax %s" % (sheet.cell(row, 0).value)
-                pass
-
-
-
-            #if is_email(str(sheet.cell(row, 1).value)):
-                #print "[+] Adding customer record " + sheet.cell(row,1).value
-                #cust = Customer.objects.create(email=str(sheet.cell(row,1).value))
-
-            #if is_fax(int(sheet.cell(row, 1).value)):
-                #print "[+] Adding broker record " + sheet.cell(row,0).value
-                #Broker.objects.create(fax=sheet.cell(row,0).value, Customer=cust)
+        if qualify_email(str(row[1])):
+            emailer_models.Client.objects.create(
+                email=str(row[1]),
+                campaign=campaign,
+            )
 

@@ -12,6 +12,15 @@ class EmailTemplate(models.Model):
         return self.name
 
 
+class FaxTemplate(models.Model):
+    name = models.CharField(max_length=100, default='Default Fax Template')
+    subject = models.CharField(max_length=100, blank=True)
+    text = models.TextField(blank=True)
+
+    def __unicode__(self):
+        return self.name
+
+
 class Campaign(models.Model):
     name = models.CharField(max_length=100, default='Default Campaign', unique=True)
 
@@ -23,6 +32,7 @@ class Campaign(models.Model):
 class TimeDelta(models.Model):
     campaign = models.ForeignKey(Campaign)
     email = models.ForeignKey(EmailTemplate)
+    fax = models.ForeignKey(FaxTemplate)
     delta = models.IntegerField()
 
     def __unicode__(self):
@@ -30,15 +40,18 @@ class TimeDelta(models.Model):
 
 
 class Client(models.Model):
-    email = models.EmailField(blank=True)
+    email = models.EmailField(null=True, blank=True)
     slug = models.CharField(max_length=50, blank=True)
-    fax = models.CharField(max_length=20, blank=True)
+    fax = models.CharField(max_length=20, null=True, blank=True)
     subscribe_now = models.BooleanField(default=True)
 
     def save(self, *args, **kwargs):
         if self.email:
             self.slug = str(abs(hash(self.email)))
-            super(Client, self).save(*args, **kwargs)
+        else:
+            self.slug = 'No email provided'
+        super(Client, self).save(*args, **kwargs)
+
         if self.subscribe_now:
             campaign = Campaign.objects.get(name='Default Campaign')
             Subscriber.objects.create(client=self, campaign=campaign)
@@ -56,7 +69,8 @@ class Subscriber(models.Model):
     last_activity = models.DateTimeField(null=True, blank=True)
 
     def save(self, *args, **kwargs):
-        self.url = "http://drssrealestate.com/unsubscribe/%s" % self.client.slug
+        if 'No email provided' not in self.client.slug:
+            self.url = "http://drssrealestate.com/unsubscribe/%s" % self.client.slug
         super(Subscriber, self).save(*args, **kwargs)
 
     def __unicode__(self):

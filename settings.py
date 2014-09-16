@@ -1,7 +1,8 @@
 
-EMAILER_FROM_ADDR = "someone@drss.domain"
+EMAILER_FROM_ADDR = "realestatemarketing@drssmail.com"
 SENDGRID_USER = "joshua.ashley@drssmail.com"
 SENDGRID_PASSWORD = "frodobagg1ns"
+RINGCENTRAL_POSTFIX = "@rcfax.com"
 
 CRISPY_TEMPLATE_PACK = 'bootstrap'
 
@@ -29,7 +30,7 @@ ADMIN_REMOVAL = ("blog.BlogPost",)
 ADMIN_MENU_ORDER = (
     ("Subscribers", ("emailer.Client", "emailer.Subscriber", "emailer.Nonsubscriber",)),
     ("Campaigns", ("emailer.Campaign", "emailer.TimeDelta",)),
-    ("Uploads", ("emailer.EmailTemplate", "emailer.Spreadsheet",)),
+    ("Templates", ("emailer.EmailTemplate", "emailer.FaxTemplate",)),
 #    ("Content", ("pages.Page", "blog.BlogPost",
 #       "generic.ThreadedComment", ("Media Library", "fb_browse"),)),
 #    ("Site", ("sites.Site", "redirects.Redirect", "conf.Setting")),
