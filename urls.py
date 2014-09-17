@@ -24,8 +24,8 @@ from emailer import views as emailer_views
 
 urlpatterns += patterns(
     '',
-    url(r'^upload/', 
-        emailer_views.upload, 
+    url(r'^upload/',
+        emailer_views.upload,
         name='upload'
     ),
     url(r'^success/',
