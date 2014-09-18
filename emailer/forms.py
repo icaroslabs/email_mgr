@@ -5,12 +5,13 @@ from django import forms
 
 from emailer import models
 
-from emailer.scripts import spreadsheet
-
 
 class SpreadsheetForm(forms.ModelForm):
-    def save_model(self):
-        spreadsheet.import_clients(self)
+    def save(self, commit=True):
+        spreadsheet.import_clients(
+            self.fields['document'],
+            self.fields['campaign'].pk,
+        )
 
     # crispy
     def __init__(self, *args, **kwargs):
@@ -19,7 +20,7 @@ class SpreadsheetForm(forms.ModelForm):
         self.form_id = 'id-spreadsheetForm'
         self.form_class = 'bootstrap'
         self.form_method = 'post'
-        self.form_action = 'upload'
+        self.form_action = 'update'
         self.helper.add_input(Submit('submit', 'Submit'))
 
     class Meta:

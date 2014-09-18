@@ -26,7 +26,7 @@ def run(*args):
             "Usage: ./manage.py runscript spreadsheet "
             "--script-args=<filename>, <campaign_id>"
         )
-        return
+        return 1
     import_clients(args[0], args[1])
 
 def import_clients(spreadsheet, campaign_id):
@@ -39,13 +39,13 @@ def import_clients(spreadsheet, campaign_id):
     except:
         print "Campaign does not exist. Try one of these."
         print ", ".join([str(cam.pk) for cam in emailer_models.Campaign.objects.all()])
-        return
+        return 1
     try:
         reader = csv.reader(open(spreadsheet))
         print '[+] Initialized reader object'
     except Exception, e:
         print '[-] %s' % e
-        return
+        return 1
 
     for row in reader:
         if qualify_fax(str(row[0])):
@@ -59,4 +59,5 @@ def import_clients(spreadsheet, campaign_id):
                 email=str(row[1]),
                 campaign=campaign,
             )
+    return 0
 

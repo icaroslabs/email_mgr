@@ -4,13 +4,15 @@ from django.views.generic.detail import DetailView
 
 from emailer.forms import UnsubscribeForm
 from emailer.models import Client, Subscriber
+from emailer.scripts import spreadsheet
 
 
 def upload(request):
     if request.method == 'POST':
-        pass
+        spreadsheet.import_clients(request.FILES[''], request.POST[''])
+        return
     else:
-        return redirect(request.META['HTTP_REFERER'])
+        return #redirect(request.META['HTTP_REFERER'])
 
 
 class Home(TemplateView):
