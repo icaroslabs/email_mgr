@@ -7,11 +7,11 @@ from emailer import models
 
 
 class SpreadsheetForm(forms.ModelForm):
-    def save(self, commit=True):
-        spreadsheet.import_clients(
-            self.fields['document'],
-            self.fields['campaign'].pk,
-        )
+    #def save(self, commit=True):
+        #spreadsheet.import_clients(
+            #self.fields['document'],
+            #self.fields['campaign'].pk,
+        #)
 
     # crispy
     def __init__(self, *args, **kwargs):
@@ -20,7 +20,7 @@ class SpreadsheetForm(forms.ModelForm):
         self.form_id = 'id-spreadsheetForm'
         self.form_class = 'bootstrap'
         self.form_method = 'post'
-        self.form_action = 'update'
+        self.form_action = 'upload'
         self.helper.add_input(Submit('submit', 'Submit'))
 
     class Meta:

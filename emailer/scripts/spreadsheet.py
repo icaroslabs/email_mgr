@@ -1,4 +1,4 @@
-import csv, sys, re, xlrd
+import csv, sys, re
 
 from drss.emailer import models as emailer_models
 
@@ -35,7 +35,7 @@ def import_clients(spreadsheet, campaign_id):
     unique client record.
     """
     try:
-        campapign = emailer_models.Campaign.objects.get(pk=campaign_id)
+        emailer_models.Campaign.objects.get(pk=campaign_id)
     except:
         print "Campaign does not exist. Try one of these."
         print ", ".join([str(cam.pk) for cam in emailer_models.Campaign.objects.all()])
@@ -51,13 +51,13 @@ def import_clients(spreadsheet, campaign_id):
         if qualify_fax(str(row[0])):
             emailer_models.Client.objects.create(
                 fax=str(row[0]),
-                campaign=campaign,
+                {'campaign_id': str(campaign_id)},
             )
 
         if qualify_email(str(row[1])):
             emailer_models.Client.objects.create(
                 email=str(row[1]),
-                campaign=campaign,
+                {'campaign_id': str(campaign_id)},
             )
     return 0
 
