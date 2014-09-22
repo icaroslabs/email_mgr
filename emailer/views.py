@@ -9,10 +9,10 @@ from emailer.scripts import spreadsheet
 
 def upload(request):
     if request.method == 'POST':
-        spreadsheet.import_clients(request.FILES[''], request.POST[''])
+        spreadsheet.import_clients(request.FILES['spreadsheet'], request.POST[''])
         return
     else:
-        return #redirect(request.META['HTTP_REFERER'])
+        return redirect(request.META['HTTP_REFERER'])
 
 
 class Home(TemplateView):

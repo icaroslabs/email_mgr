@@ -24,7 +24,7 @@ def run(*args):
     if len(args) != 2:
         print (
             "Usage: ./manage.py runscript spreadsheet "
-            "--script-args=<filename>, <campaign_id>"
+            "--script-args=<filename> <campaign_id>"
         )
         return 1
     import_clients(args[0], args[1])
@@ -35,7 +35,7 @@ def import_clients(spreadsheet, campaign_id):
     unique client record.
     """
     try:
-        emailer_models.Campaign.objects.get(pk=campaign_id)
+        campaign = emailer_models.Campaign.objects.get(pk=campaign_id)
     except:
         print "Campaign does not exist. Try one of these."
         print ", ".join([str(cam.pk) for cam in emailer_models.Campaign.objects.all()])
@@ -49,15 +49,24 @@ def import_clients(spreadsheet, campaign_id):
 
     for row in reader:
         if qualify_fax(str(row[0])):
-            emailer_models.Client.objects.create(
+            c = emailer_models.Client.objects.create(
                 fax=str(row[0]),
-                {'campaign_id': str(campaign_id)},
             )
+            s = emailer_models.Subscriber.objects.get(
+                client_id=c.pk
+            )
+            s.campaign = campaign
+            s.save()
 
         if qualify_email(str(row[1])):
-            emailer_models.Client.objects.create(
+            c = emailer_models.Client.objects.create(
                 email=str(row[1]),
-                {'campaign_id': str(campaign_id)},
             )
+            s = emailer_models.Subscriber.objects.get(
+                client_id=c.pk
+            )
+            s.campaign = campaign
+            s.save()
+
     return 0
 

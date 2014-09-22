@@ -53,10 +53,7 @@ class Client(models.Model):
         super(Client, self).save(*args, **kwargs)
 
         if self.subscribe_now:
-            if kwargs['campaign_id']:
-                campaign = Campaign.objects.get(pk=kwargs['campaign_id'])
-            else:
-                campaign = Campaign.objects.get(name='Default Campaign')
+            campaign = Campaign.objects.get(name='Default Campaign')
             Subscriber.objects.create(client=self, campaign=campaign)
 
     def __unicode__(self):
