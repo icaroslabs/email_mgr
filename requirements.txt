@@ -28,8 +28,11 @@ psycopg2==2.5.3
 pytz==2014.4
 requests==2.3.0
 requests-oauthlib==0.4.1
+sendgrid==1.1.1
 six==1.7.3
+smtpapi==0.1.2
 supervisor==3.0b2
 tzlocal==1.0
+unittest2==0.5.1
 virtualenv==1.11.6
 wsgiref==0.1.2

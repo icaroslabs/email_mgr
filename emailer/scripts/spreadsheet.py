@@ -1,6 +1,6 @@
 import csv, sys, re
 
-from drss.emailer import models as emailer_models
+from emailer import models as emailer_models
 
 
 FAX_PATTERN = re.compile((
