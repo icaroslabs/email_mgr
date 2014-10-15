@@ -1,0 +1,22 @@
+{% load crispy_forms_tags %}
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Unsubscribe</title>
+
+    <!-- Bootstrap -->
+    <link href="/static/css/bootstrap.css" rel="stylesheet">
+</head>
+<body>
+<div class="jumbotron">
+	<h1>Please don't go!</h1>
+	<p>To unsubscribe from this mailing list, simply enter your email below.</p>
+	<p>{% crispy form %}</p>
+
+
+</div>
+</body>
