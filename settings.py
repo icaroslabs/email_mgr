@@ -274,6 +274,7 @@ INSTALLED_APPS = (
     #"mezzanine.mobile",
 
     "crispy_forms",
+    "reversion",
 
     "djcelery",
     "emailer",
